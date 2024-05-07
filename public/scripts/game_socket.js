@@ -53,12 +53,14 @@ const Socket = (function() {
             message = JSON.parse(message);
             const {user} = message;
             const {username, avatar, name} = user;
+            // trigger shooting
         });
 
         socket.on("someone update score", (message) => {
             message = JSON.parse(message);
             const {user, score} = message;
             const {username, avatar, name} = user;
+            // trigger score updating
         });
 
         socket.on("someone finish", (message) => {
@@ -81,7 +83,7 @@ const Socket = (function() {
             // const {...} = message;
             console.log("create obstacle");
 
-            // create obstacle...
+            // trigger create obstacle
         });
 
         return true;
