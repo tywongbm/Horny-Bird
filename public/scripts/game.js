@@ -1,6 +1,8 @@
 /* Obstacle */
 let obstacleInterval;
 let animationFrameIds = [];
+let animationFrameIdss = [];
+timetofire=false;
 const obstacleWidth = 80; // obstacle width
 const gapHeight = 150; // obstacle gap
 
@@ -92,6 +94,64 @@ function jump() {
 let gameStarted = false;
 let score = 0;
 
+/**/ 
+
+
+function createBullet(y_index=100) {
+
+    const bullet = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    bullet.setAttribute("class", "bullet");
+
+    const Bullet = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    Bullet.setAttribute("width", 10);
+    Bullet.setAttribute("height", 10);
+    Bullet.setAttribute("y", y_index);
+    Bullet.setAttribute("x", 40);
+    Bullet.setAttribute("fill", "yellow");
+
+    bullet.appendChild(Bullet);
+
+    document.querySelector("svg").appendChild(bullet);
+
+    return bullet;
+}
+
+function animateBullet(bullet) {
+    let xx = 40;
+    const speed = 2;
+    alreadyhit=false;
+
+    function moveBullet() {
+        xx += speed;
+        bullet.setAttribute("transform", `translate(${xx}, 0)`);
+        const obstacles = document.querySelectorAll(".obstacle rect"); 
+
+        for (let i = 0; i < obstacles.length; i +=1){
+            const ObstacleRec = obstacles[i].getBoundingClientRect();
+            if(  (alreadyhit==false) && (xx>ObstacleRec.left)){
+                
+                
+                
+            }
+        }
+
+        if (xx <1000) {
+            let requestIdd = requestAnimationFrame(moveBullet);
+            animationFrameIdss.push(requestIdd);
+        } else {
+            bullet.remove();
+        }
+    }
+    requestAnimationFrame(moveBullet);
+}
+
+
+
+
+
+
+/* */
+
 function updateScore() {
     score += 1; 
     document.getElementById('score').textContent = score;
@@ -102,17 +162,39 @@ function startGame() {
     document.getElementById('gameover-container').style.display = 'none';
 
     document.querySelectorAll('svg .obstacle').forEach(obstacle => obstacle.remove());
+
+    document.querySelectorAll('svg .bullet').forEach(bullet => bullet.remove());
+
     document.getElementById('player').setAttribute('transform', 'translate(30, 160)');
     gameStarted = true;
     score = 0;
     document.getElementById('score').textContent = score;
 
     gravityInterval = setInterval(updatePlayer, 20);
+
+    bInterval = setInterval(() => {
+        if(timetofire==true){
+            const newBullet = createBullet(playerY+10);
+            animateBullet(newBullet);
+            timetofire=false;
+            
+        }
+    }, 20); 
+
+
+
+
+
     obstacleInterval = setInterval(() => {
         const newObstacle = createObstacle();
         animateObstacle(newObstacle);
     }, 1000); // obstacle frequency
     checkGameover();
+
+    
+
+
+   
 }
 
 
@@ -160,5 +242,14 @@ $(document).ready(function() {
                 jump();
             }
         }
+
+        if (e.keyCode == 70) { // Space key
+            timetofire=true;
+        }else
+        {
+            timetofire=false;
+        }
+
+
     });
 });
