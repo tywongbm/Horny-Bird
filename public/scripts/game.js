@@ -177,6 +177,19 @@ function endGame() {
     animationFrameIds = [];
    
     document.getElementById('final-score').textContent = document.getElementById('score').textContent;
+    /* ********************************************** */
+    /* Shoule be Modified, request date from server */
+    /* ********************************************** */
+    document.getElementById('jump-number').textContent = 0;
+    document.getElementById('shoot-number').textContent = 0;
+    document.getElementById('no1-user').textContent = "Alice";
+    document.getElementById('no1-score').textContent = 250;
+    document.getElementById('no2-user').textContent = "Alice";
+    document.getElementById('no2-score').textContent = 250;
+    document.getElementById('no3-user').textContent = "Alice";
+    document.getElementById('no3-score').textContent = 250;
+    /* ********************************************** */
+
     document.getElementById('gameover-container').style.display = 'block';
     document.getElementById('restart').style.display = 'block';
 
