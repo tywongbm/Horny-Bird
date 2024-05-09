@@ -250,3 +250,8 @@ button.icon:active {
     width: 270px;
     align-self: stretch;
 }
+
+
+#gameover-container {
+    display: none;
+}

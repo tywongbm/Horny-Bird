@@ -1,113 +1,142 @@
-function animateObstacle() {
-    const obstacle = document.getElementById("obstacle");
-    let startPos = 1000;
-    const endPos = -120;
-    const speed = 1;
+/* Obstacle */
+let obstacleInterval;
+let animationFrameIds = [];
 
-    function frame() {
-        startPos -= speed;
-        if (startPos > endPos) {
-            obstacle.style.transform = `translateX(${startPos}px)`;
-            animationFrameId = requestAnimationFrame(frame);
+function createObstacle() {
+    const obstacle = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    obstacle.setAttribute("class", "obstacle");
+
+    const upperHeight = Math.random() * 100 + 50;
+    const gapHeight = Math.random() * 50 + 100;  // 间隙在100到150之间
+    const lowerY = upperHeight + gapHeight;
+    const lowerHeight = 400 - lowerY;
+
+    const upperObstacle = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    upperObstacle.setAttribute("width", "80");
+    upperObstacle.setAttribute("height", upperHeight);
+    upperObstacle.setAttribute("fill", "#000000");
+
+    const lowerObstacle = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    lowerObstacle.setAttribute("width", "80");
+    lowerObstacle.setAttribute("height", lowerHeight.toString());
+    lowerObstacle.setAttribute("y", lowerY);
+    lowerObstacle.setAttribute("fill", "#000000");
+
+    obstacle.appendChild(upperObstacle);
+    obstacle.appendChild(lowerObstacle);
+
+    document.querySelector("svg").appendChild(obstacle);
+
+    return obstacle;
+}
+
+function animateObstacle(obstacle) {
+    let xPos = 1000;
+    const speed = 2;
+    function move() {
+        xPos -= speed;
+        obstacle.setAttribute("transform", `translate(${xPos}, 0)`);
+        if (xPos > -120) {
+            let requestId = requestAnimationFrame(move);
+            animationFrameIds.push(requestId);
+        } else {
+            obstacle.remove();
         }
     }
-    animationFrameId = requestAnimationFrame(frame);
+    requestAnimationFrame(move);
 }
 
-function makeObstacle() {
 
-    // You need to show the obstacle and start the animation here
-    $("#obstacle").show();
-    $("#obstacle").css("animation-name","obstacle-animation" )
 
-}
-
+/* Player */
 let gravityInterval;
 let velocity = 0;
 const gravity = 1;
-const jumpPower = -10;  // 跳跃的力量，负值表示向上跳跃
+const jumpPower = -10;
 let playerY = 160;
 
-function startGame() {
-    animateObstacle();
-    gravityInterval = setInterval(updatePlayer, 20);
-    setInterval(createObstacle, obstacleInterval);
-    checkGameover();
-}
-
 function updatePlayer() {
-    velocity += gravity;  // 每次增加重力值到速度中
-    playerY += velocity;  // 更新玩家的Y位置
-    $("#player").css("transform", `translate(30px, ${playerY}px)`);  // 应用新位置
+    velocity += gravity;
+    playerY += velocity;
+    $("#player").css("transform", `translate(30px, ${playerY}px)`);
 
-    // 添加边界检测，避免玩家超出游戏区域
-    if (playerY > 380) {  // 假设游戏区域底部是500px
+    if (playerY > 380) {
         playerY = 380;
         velocity = 0;
-    } else if (playerY < 0) {  // 防止玩家越过顶部
+    } else if (playerY < 0) {
         playerY = 0;
         velocity = 0;
     }
 }
 
 function jump() {
+    if (!gameStarted) return;
     velocity = jumpPower;  // 设置向上的初速度
 }
 
 
-function checkGameover() {
-    const playerRect = $("#player")[0].getBoundingClientRect();
-    const upperObstacleRect = $("#upperObstacle")[0].getBoundingClientRect();
-    const lowerObstacleRect = $("#lowerObstacle")[0].getBoundingClientRect();
 
-    if ((playerRect.top < upperObstacleRect.bottom && playerRect.left > upperObstacleRect.left && playerRect.right < upperObstacleRect.right) ||
-        (playerRect.bottom > lowerObstacleRect.top && playerRect.left > lowerObstacleRect.left && playerRect.right < lowerObstacleRect.right) ) {  
-            clearInterval(gravityInterval);
-            cancelAnimationFrame(animationFrameId);
-            alert("gameover")
-    } else {
-        setTimeout(checkGameover, 10);
+
+/* During game */
+let gameStarted = false;
+
+function startGame() {
+    $('#waitingStart-container').hide();
+    $('#gameover-container').hide();
+    document.querySelectorAll('svg .obstacle').forEach(obstacle => obstacle.remove());
+    document.getElementById('player').setAttribute('transform', 'translate(30, 160)');
+    gameStarted = true;
+
+    gravityInterval = setInterval(updatePlayer, 20);
+    obstacleInterval = setInterval(() => {
+        const newObstacle = createObstacle();
+        animateObstacle(newObstacle);
+    }, 1000); 
+    checkGameover();
+}
+
+
+function endGame() {
+    clearInterval(gravityInterval);
+    clearInterval(obstacleInterval);
+    animationFrameIds.forEach(id => cancelAnimationFrame(id));
+    animationFrameIds = [];
+   
+    $('#gameover-container').show();
+    gameStarted = false;
+}
+
+
+function checkGameover() {
+
+    if (!gameStarted) return;
+
+    const playerRect = $("#player")[0].getBoundingClientRect();
+    const obstacles = document.querySelectorAll(".obstacle rect"); 
+
+    for (let i = 0; i < obstacles.length; i += 2) {
+        const upperObstacleRect = obstacles[i].getBoundingClientRect();
+        const lowerObstacleRect = obstacles[i + 1].getBoundingClientRect();
+        console.log(upperObstacleRect)
+        console.log(lowerObstacleRect)
+
+        if ((playerRect.top < upperObstacleRect.bottom && playerRect.left > upperObstacleRect.left && playerRect.right < upperObstacleRect.right) ||
+            (playerRect.bottom > lowerObstacleRect.top && playerRect.left > lowerObstacleRect.left && playerRect.right < lowerObstacleRect.right) ) {  
+                endGame();
+        }
     }
+    
+    setTimeout(checkGameover, 100);
 }
 
 $(document).ready(function() {
-    $("#gamearea").on('click', jump);
-    startGame();
-});
-
-$(function () {
-    // Handle the spacebar key for controlling the player
-    $(document).on("keydown", function(e) {
-        // The player jumps if the spacebar key is down
-        if (e.keyCode == 32)
-            jump();
+    $(document).on('keydown', function(e) {
+        if (e.keyCode == 32) { // Space key
+            if (!gameStarted) {
+                startGame();
+            } else {
+                jump();
+            }
+        }
     });
-
-    // The obstacle animation has finished
-    $("#obstacle").on("animationend", function() {
-
-        // You need to hide the obstacle and stop the animation here
-        $("#obstacle").hide();
-        $("#obstacle").css("animation-name", "none");
-
-        // You will make another obstacle later
-        let duration = parseFloat($("#obstacle").css("animation-duration"));
-        $("#obstacle").css("animation-duration", (duration*0.8)+"s");
-        setTimeout(makeObstacle, Math.random() * 2000);
-
-    });
-
-    // The player animation has finished
-    $("#player").on("animationend", function() {
-
-        // You need to stop the animation here
-        $("#player").css("animation-name", "none");
-
-    });
-
-    // Start the obstacle animation
-    setTimeout(makeObstacle, Math.random() * 2000);
-
-    // Start the game over checking
-    setTimeout(checkGameover, 100);
 });

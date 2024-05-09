@@ -25,20 +25,22 @@
             <stop id="jq_stop_1116" offset="1" stop-color="#000000" stop-opacity="1"/>
         </radialGradient>
         
-        <g id="obstacle">
-            <rect id="upperObstacle" fill="#000000" height="150" width="80" x="0" y="0" stroke="#000000"/>
-            <rect id="lowerObstacle" fill="#000000" height="150" width="80" x="0" y="350" stroke="#000000"/>
-        </g>
-        
-        
         <g id="player" transform="translate(30, 160)">
             <path d="M10 10 L20 10 L20 20 L10 20 Z" fill="red" stroke="black" stroke-width="2"/>
         </g>
 
+        <g id="waitingStart-container">
+            <text id="waiting" x="500" y="200" fill="red"
+                  font-size="40px" text-anchor="middle">Press [Space] to start the game</text>
+        </g>
 
         <g id="gameover-container">
-            <text id="gameover" x="0" y="0" fill="red"
-                  font-size="80px" text-anchor="middle">Game Over</text>
+            <text id="gameover" x="500" y="200" fill="red"
+                  font-size="40px" text-anchor="middle">Game Over, Press [Space] to restart the game</text>
         </g>
+
+        
+        <g></g>
+        
     </svg>
 </html>
