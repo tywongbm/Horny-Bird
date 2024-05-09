@@ -53,21 +53,33 @@ const Socket = (function() {
             message = JSON.parse(message);
             const {user} = message;
             const {username, avatar, name} = user;
+<<<<<<< Updated upstream
             // trigger shooting
+=======
+            // shoot
+>>>>>>> Stashed changes
         });
 
         socket.on("someone update score", (message) => {
             message = JSON.parse(message);
             const {user, score} = message;
             const {username, avatar, name} = user;
+<<<<<<< Updated upstream
             // trigger score updating
+=======
+            updateScore(score);
+>>>>>>> Stashed changes
         });
 
         socket.on("someone finish", (message) => {
             message = JSON.parse(message);
             const {user} = message;
             const {username, avatar, name} = user;
+<<<<<<< Updated upstream
             Gameover();
+=======
+            endGame();
+>>>>>>> Stashed changes
         });
 
         socket.on("start game", (message) => {
@@ -81,9 +93,17 @@ const Socket = (function() {
         socket.on("create obstacle", (m) => {
             m = JSON.parse(m);
             // const {...} = message;
+<<<<<<< Updated upstream
             console.log("create obstacle");
 
             // trigger create obstacle
+=======
+            const {obstacleWidth, gapHeight, upperHeight} = m;
+            console.log("create obstacle");
+
+            // create obstacle...
+            createAndAnimateObstacle(obstacleWidth, gapHeight, upperHeight);
+>>>>>>> Stashed changes
         });
 
         return true;
