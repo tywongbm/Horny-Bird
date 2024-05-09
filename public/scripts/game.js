@@ -113,12 +113,25 @@ let gameStarted = false;
 let gameOverState = false;
 let score = 0;
 
+
 function updateScore(s) {
+    var scoreSound = document.getElementById('score-sound');
+    scoreSound.pause();
+    scoreSound.play();
+    
     score = s; 
     document.getElementById('score').textContent = score;
 }
 
+
+
+
 function startGame() {
+    var gameoverSound = document.getElementById('gameover-sound');
+    var backgroundSound = document.getElementById('background-sound');
+    gameoverSound.pause();
+    backgroundSound.play();
+
     document.getElementById('waitingStart-container').style.display = 'none';
     document.getElementById('gameover-container').style.display = 'none';
 
@@ -140,6 +153,11 @@ function startGame() {
 
 
 function endGame() {
+    var gameoverSound = document.getElementById('gameover-sound');
+    var backgroundSound = document.getElementById('background-sound');
+    backgroundSound.pause();
+    gameoverSound.play();
+
     clearInterval(gravityInterval);
     clearInterval(obstacleInterval);
     animationFrameIds.forEach(id => cancelAnimationFrame(id));
