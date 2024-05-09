@@ -282,7 +282,7 @@ button.icon:active {
 }
 
 #gameover-container {
-    display: block;
+    display: none;
 }
 
 #gameover-container h2{

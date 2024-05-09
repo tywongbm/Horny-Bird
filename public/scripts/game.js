@@ -19,7 +19,7 @@ function createObstacle(obstacleWidth, gapHeight, upperHeight) {
     upperObstacle.setAttribute("width", obstacleWidth);
     upperObstacle.setAttribute("height", upperHeight);
     upperObstacle.setAttribute("y", -10);
-    upperObstacle.setAttribute("fill", "#fffed0");    
+    upperObstacle.setAttribute("fill", "#fdf3e9");    
     upperObstacle.setAttribute("rx", "10");
     upperObstacle.setAttribute("ry", "10");
 
@@ -28,7 +28,7 @@ function createObstacle(obstacleWidth, gapHeight, upperHeight) {
     lowerObstacle.setAttribute("width", obstacleWidth);
     lowerObstacle.setAttribute("height", lowerHeight.toString());
     lowerObstacle.setAttribute("y", lowerY+10);
-    lowerObstacle.setAttribute("fill", "#fffed0");
+    lowerObstacle.setAttribute("fill", "#fdf3e9");
     lowerObstacle.setAttribute("rx", "10");
     lowerObstacle.setAttribute("ry", "10");
 
