@@ -265,20 +265,77 @@ button.icon:active {
     color: #eb4a40;
 }
 
-#waitingStart-container, #gameover-container {
+
+#waitingStart-container, #gameover-container, #restart {
     position: absolute;
-    top: 200px;
-    left: 500px;
+    top: 250px;
+    left: 650px;
     transform: translate(-50%, -50%);
-    font-size: 30px;
+    font-size: 28px;
     color: #eb4a40;
     text-align: center;
 }
 
-#gameover-container {
+#restart {
     display: none;
+    top:500px;
 }
 
-#gameover-container span {
+#gameover-container {
+    display: block;
+}
+
+#gameover-container h2{
+    margin-top: 0px;
+    margin-bottom: 5px;
+    font-size: 60px;
+}
+
+#gameover-container h3{
+    margin: 0px;
+    color: white;
+    font-size: 40px;
+}
+
+#gameover-container h4 {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+
+#gameover-container h2 span{
     color: #eb4a40;
 }
+
+#gameover-container p{
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+#gameover-container #statistics span {
+    color: white;
+    font-weight: bold;
+}
+
+#gameover-container #statistics p{
+    color: white;
+}
+
+#gameover-container {
+    padding: 28px;
+    border-radius: 20px;
+    background-color: rgb(54, 70, 87);
+}
+
+#gameover-container #ranking {
+    margin: auto;
+    margin-top: 20px;
+    width: fit-content;
+
+    padding: 10px 30px;
+    border-radius: 10px;
+    background-color:#ded8d3;
+}
+
+
+

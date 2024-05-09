@@ -27,12 +27,36 @@
         Press [Space] to start the game
     </div>
     <div id="gameover-container">
-        Your final score: <span id="final-score">0</span><br>
+        <h3>Score</h3>
+        <h2>
+            <span id="final-score">0</span>
+        </h2>
+
+        <div id="statistics">
+            <p>
+                Jump: <span id="jump-number">0</span> time(s)<br>
+                Shoot: <span id="shoot-number">0</span> time(s)
+            </p>
+        </div>
+
+        <div id="ranking">
+            <h4>Ranking</h4>
+            <p>
+                no.1  <span id="no1-user">Alice</span>  <span id="no1-score">250</span><br>
+                no.2  <span id="no2-user">Alice</span>  <span id="no2-score">250</span><br>
+                no.3  <span id="no3-user">Alice</span>  <span id="no3-score">250</span>
+            </p>
+        </div>
+    </div>
+
+    <div>
         <span id="restart">Press [Space] to restart the game.</span>
     </div>
 
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 400">
-        <!-- The game over text -->
+        <image href="./bg.gif" x="0" y="0" height="400px" width="1000px" preserveAspectRatio="none"/>
+        <rect id="mask" x="0" y="0" width="1000" height="400" fill="black" opacity="0.2"/>
+        <!-- 
         <linearGradient id="skyGradient" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="400">
             <stop offset="0%" stop-color="#0066CC" />
             <stop offset="100%" stop-color="#87CEEB" />
@@ -43,10 +67,11 @@
             <stop id="jq_stop_9921" offset="0.07" stop-color="#7f3f00"/>
             <stop id="jq_stop_1116" offset="1" stop-color="#000000" stop-opacity="1"/>
         </radialGradient>
-
+    -->
         <g id="player" transform="translate(30, 160)">
             <image href="./bird.png" x="10" y="10" width="50" height="50"/>
         </g>
+
 
         <!-- 
         <g id="player" transform="translate(30, 160)">

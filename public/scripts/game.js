@@ -18,13 +18,20 @@ function createObstacle(obstacleWidth, gapHeight, upperHeight) {
     const upperObstacle = document.createElementNS("http://www.w3.org/2000/svg", "rect");
     upperObstacle.setAttribute("width", obstacleWidth);
     upperObstacle.setAttribute("height", upperHeight);
-    upperObstacle.setAttribute("fill", "#000000");
+    upperObstacle.setAttribute("y", -10);
+    upperObstacle.setAttribute("fill", "#fffed0");    
+    upperObstacle.setAttribute("rx", "10");
+    upperObstacle.setAttribute("ry", "10");
+
 
     const lowerObstacle = document.createElementNS("http://www.w3.org/2000/svg", "rect");
     lowerObstacle.setAttribute("width", obstacleWidth);
     lowerObstacle.setAttribute("height", lowerHeight.toString());
-    lowerObstacle.setAttribute("y", lowerY);
-    lowerObstacle.setAttribute("fill", "#000000");
+    lowerObstacle.setAttribute("y", lowerY+10);
+    lowerObstacle.setAttribute("fill", "#fffed0");
+    lowerObstacle.setAttribute("rx", "10");
+    lowerObstacle.setAttribute("ry", "10");
+
 
     obstacle.appendChild(upperObstacle);
     obstacle.appendChild(lowerObstacle);
@@ -140,6 +147,7 @@ function startGame() {
 
     document.getElementById('waitingStart-container').style.display = 'none';
     document.getElementById('gameover-container').style.display = 'none';
+    document.getElementById('restart').style.display = 'none';
 
     document.querySelectorAll('svg .obstacle').forEach(obstacle => obstacle.remove());
     document.getElementById('player').setAttribute('transform', 'translate(30, 160)');
@@ -169,8 +177,8 @@ function endGame() {
     animationFrameIds = [];
    
     document.getElementById('final-score').textContent = document.getElementById('score').textContent;
-    document.getElementById('restart').textContent = "";
     document.getElementById('gameover-container').style.display = 'block';
+    document.getElementById('restart').style.display = 'block';
 
     gameStarted = false;
     gameOverState = true;
@@ -180,7 +188,6 @@ function endGame() {
     numObstaclesPassed = 0;
 
     setTimeout(() => {
-        document.getElementById('restart').textContent = "Press [Space] to restart the game.";
         gameOverState = false;
     }, 2000);
 }
