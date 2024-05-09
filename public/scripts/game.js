@@ -58,6 +58,9 @@ function animateObstacle(obstacleObj) {
         if (xPos + obstacleWidth < playerX && !hasScored) {
             hasScored = true;
             numObstaclesPassed += 1;
+            var scoreSound = document.getElementById('score-sound');
+            scoreSound.pause();
+            scoreSound.play();
             //updateScore();
             Socket.sendUpdateScoreEvent(numObstaclesPassed);
         }
@@ -92,13 +95,8 @@ function updatePlayer() {
     playerY += velocity;
     $("#player").css("transform", `translate(30px, ${playerY}px)`);
 
-    if (playerY > 380) {
-        playerY = 380;
-        velocity = 0;
-    } else if (playerY < 0) {
-        playerY = 0;
-        velocity = 0;
-    }
+    playerY = Math.min(360, Math.max(-40, playerY));
+    velocity = (playerY === 0 || playerY === 360) ? 0 : velocity;
 }
 
 function jump() {
@@ -106,7 +104,22 @@ function jump() {
     velocity = jumpPower;
 }
 
+/* Cheating mode */
+let enterPressed = false;
 
+document.addEventListener('keydown', function(event) {
+    if (event.key === "Enter") {
+        enterPressed = true;
+        $("#player").css('opacity', '0.2');
+    }
+});
+
+document.addEventListener('keyup', function(event) {
+    if (event.key === "Enter") {
+        enterPressed = false;
+        $("#player").css('opacity', '1'); 
+    }
+});
 
 /* During game */
 let gameStarted = false;
@@ -115,16 +128,9 @@ let score = 0;
 
 
 function updateScore(s) {
-    var scoreSound = document.getElementById('score-sound');
-    scoreSound.pause();
-    scoreSound.play();
-    
     score = s; 
     document.getElementById('score').textContent = score;
 }
-
-
-
 
 function startGame() {
     var gameoverSound = document.getElementById('gameover-sound');
@@ -151,7 +157,6 @@ function startGame() {
     checkGameover();
 }
 
-
 function endGame() {
     var gameoverSound = document.getElementById('gameover-sound');
     var backgroundSound = document.getElementById('background-sound');
@@ -171,7 +176,6 @@ function endGame() {
     gameOverState = true;
 
 
-    
     score = 0;
     numObstaclesPassed = 0;
 
@@ -183,7 +187,9 @@ function endGame() {
 
 function checkGameover() {
 
-    if (!gameStarted) return;
+    setTimeout(checkGameover, 100);
+
+    if (!gameStarted || enterPressed) return;
 
     const playerRect = $("#player")[0].getBoundingClientRect();
     const obstacles = document.querySelectorAll(".obstacle rect"); 
@@ -199,7 +205,6 @@ function checkGameover() {
         }
     }
     
-    setTimeout(checkGameover, 100);
 }
 
 
