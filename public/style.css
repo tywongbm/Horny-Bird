@@ -250,3 +250,35 @@ button.icon:active {
     width: 270px;
     align-self: stretch;
 }
+
+
+
+#score-container {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 24px;
+    color: #eb4a40;
+}
+
+#score-container span {
+    color: #eb4a40;
+}
+
+#waitingStart-container, #gameover-container {
+    position: absolute;
+    top: 200px;
+    left: 500px;
+    transform: translate(-50%, -50%);
+    font-size: 30px;
+    color: #eb4a40;
+    text-align: center;
+}
+
+#gameover-container {
+    display: none;
+}
+
+#gameover-container span {
+    color: #eb4a40;
+}

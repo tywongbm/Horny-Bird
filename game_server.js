@@ -225,11 +225,9 @@ const onlineUserList = {};
 
 let num_users = 0;
 let num_clients = 0;
-<<<<<<< Updated upstream
-const obstacleInterval = 2000;
-=======
+
 let obstacleInterval;
->>>>>>> Stashed changes
+
 
 io.on("connection", (socket) => {
     if (socket.request.session.user) {
@@ -276,16 +274,7 @@ io.on("connection", (socket) => {
             if (num_clients == 2) {
                 // if the server has 2 clients requesting entering game, start the game
                 io.emit("start game", JSON.stringify(message, null, " "));
-<<<<<<< Updated upstream
-                setInterval(() => {
-                    
-                    const m = {
-                        // m should contain parameters related to obstacle creation
-                    };
 
-                    io.emit("create obstacle", JSON.stringify(m, null, " "));
-                }, obstacleInterval);
-=======
                 obstacleInterval = setInterval(() => {
                     
                     const m = {
@@ -297,7 +286,7 @@ io.on("connection", (socket) => {
 
                     io.emit("create obstacle", JSON.stringify(m, null, " "));
                 }, 2000);
->>>>>>> Stashed changes
+
             }
 
         }
@@ -356,12 +345,10 @@ io.on("connection", (socket) => {
                 user: user,
             };
 
-<<<<<<< Updated upstream
-=======
             // if game is over, all users finish
             clearInterval(obstacleInterval);
+            num_clients = 0;
 
->>>>>>> Stashed changes
             io.emit("someone finish", JSON.stringify(message, null, " "));
         }
     });
