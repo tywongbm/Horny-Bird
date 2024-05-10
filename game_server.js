@@ -221,7 +221,6 @@ io.use((socket, next) => {
 const onlineUserList = {};
 
 let num_users = 0;
-let num_clients = 0;
 
 let obstacleInterval;
 
@@ -243,8 +242,6 @@ io.on("connection", (socket) => {
                 delete onlineUserList[username];
             }
             io.emit("remove user", JSON.stringify(user));
-
-            num_clients -= 1;
             
             console.log("456");
             console.log(onlineUserList);
@@ -266,7 +263,24 @@ io.on("connection", (socket) => {
                 user: user,
             };
 
-            num_clients += 1;
+            num_clients = Object.keys(onlineUserList).length;
+            if (num_clients == 1) {
+                // if the server has 2 clients requesting entering game, start the game
+                io.emit("start game", JSON.stringify(message, null, " "));
+
+                obstacleInterval = setInterval(() => {
+                    
+                    const m = {
+                        // m should contain parameters related to obstacle creation
+                        obstacleWidth: 80, 
+                        gapHeight: 150, 
+                        upperHeight: Math.random() * 200 + 50
+                    };
+
+                    io.emit("create obstacle", JSON.stringify(m, null, " "));
+                }, 2000);
+
+            }
 
             if (num_clients == 2) {
                 // if the server has 2 clients requesting entering game, start the game
@@ -344,7 +358,6 @@ io.on("connection", (socket) => {
 
             // if game is over, all users finish
             clearInterval(obstacleInterval);
-            num_clients = 0;
 
             io.emit("someone finish", JSON.stringify(message, null, " "));
         }
