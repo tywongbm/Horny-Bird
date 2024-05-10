@@ -88,6 +88,74 @@ function createAndAnimateObstacle(obstacleWidth, gapHeight, upperHeight) {
 }
 
 
+/* Shooting */
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'k') {
+        shootBullet(playerY);
+    }
+});
+
+function shootBullet(playerY) {
+    const bullet = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    bullet.setAttribute("x", playerX + 10);
+    bullet.setAttribute("y", playerY + 10);
+    bullet.setAttribute("width", "10");
+    bullet.setAttribute("height", "10");
+    bullet.setAttribute("fill", "red");
+    document.querySelector("svg").appendChild(bullet);
+    animateBullet(bullet);
+}
+
+function animateBullet(bullet) {
+    let xPos = parseInt(bullet.getAttribute("x"), 10);
+    const speed = 5;
+
+    function move() {
+        xPos += speed;
+        bullet.setAttribute("x", xPos);
+
+        // Check for collision with obstacles
+        if (checkCollisionWithObstacles(xPos, parseInt(bullet.getAttribute("y"), 10))) {
+            bullet.remove(); // remove bullet if it hits an obstacle
+        } else if (xPos < 1000) {
+            requestAnimationFrame(move);
+        } else {
+            bullet.remove(); // remove bullet when it goes off screen
+        }
+    }
+
+    requestAnimationFrame(move);
+}
+
+function checkCollisionWithObstacles(bulletX, bulletY) {
+    const obstacles = document.querySelectorAll(".obstacle");
+    for (let obstacle of obstacles) {
+        const upperObstacle = obstacle.children[0];
+        const lowerObstacle = obstacle.children[1];
+        const obstacleX = parseInt(obstacle.getAttribute("transform").match(/translate\(([^,]+),/)[1]);
+
+        // 假设障碍物宽度为50
+        if (bulletX > obstacleX && bulletX < obstacleX + 80) {
+            // 检查子弹是否击中上面的柱子
+            const upperObstacleHeight = parseInt(upperObstacle.getAttribute("height"));
+            if (bulletY >= 0 && bulletY <= upperObstacleHeight) {
+                upperObstacle.remove(); // 如果击中，移除上面的柱子
+                return true; // 返回碰撞为真
+            }
+
+            // 检查子弹是否击中下面的柱子
+            const lowerObstacleY = parseInt(lowerObstacle.getAttribute("y"));
+            const lowerObstacleHeight = parseInt(lowerObstacle.getAttribute("height"));
+            if (bulletY >= lowerObstacleY && bulletY <= lowerObstacleY + lowerObstacleHeight) {
+                lowerObstacle.remove(); // 如果击中，移除下面的柱子
+                return true; // 返回碰撞为真
+            }
+        }
+    }
+    return false; // 如果没有任何碰撞，返回假
+}
+
+
 
 /* Player */
 let gravityInterval;
@@ -117,7 +185,7 @@ let enterPressed = false;
 document.addEventListener('keydown', function(event) {
     if (event.key === "Enter") {
         enterPressed = true;
-        $("#player").css('opacity', '0.2');
+        $("#player").css('opacity', '0.5');
     }
 });
 
@@ -379,7 +447,7 @@ const RegisterPage = (function() {
 
         document.getElementById("register-redirect-page-back-button").onclick = function() {
             $("#register-redirect-page").hide();
-            FrontPage.show();
+            SignInPage.show();
         };
 
         document.getElementById("register-page-back-button").onclick = function() {
