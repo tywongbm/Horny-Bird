@@ -90,6 +90,13 @@ const Socket = (function() {
 
         });
 
+        socket.on("fire bullet", (m) => {
+            m = JSON.parse(m);
+
+            const {playerX, playerY} = m;
+            shootBullet(playerX, playerY);
+        });
+
         socket.on("enable cheat mode", () => {
             enableCheatMode();
         });

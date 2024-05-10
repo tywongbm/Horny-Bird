@@ -327,7 +327,11 @@ io.on("connection", (socket) => {
                 user: user,
             };
 
+            
             io.emit("someone shoot", JSON.stringify(message, null, " "));
+            
+
+            
         }
     });
 
@@ -370,7 +374,9 @@ io.on("connection", (socket) => {
 
             message = JSON.parse(message);
 
-            io.emit("fire bullet", JSON.stringify(message, null, " "));
+            if (num_clients == 2) {
+                io.emit("fire bullet", JSON.stringify(message, null, " "));
+            }
         }
     });
 
