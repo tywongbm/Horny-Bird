@@ -14,85 +14,140 @@
     <script src="scripts/game_socket.js"></script>
     <script src="scripts/game_authentication.js"></script>
     <script src="scripts/game_registration.js"></script>
+
+    <style>
+        .small-button {
+            box-sizing: boarder-box;
+            border: 2px solid black;
+            font-size: 8vh;
+            text-align: center;
+            width: 50vw;
+            height: 20vh;
+            margin: 2vh 2vw;
+            padding-top: 2vh;
+        }
+    </style>
+
 </head>
 <body>
-    <audio id="score-sound" src="score.mp3" preload="auto"></audio>
-    <audio id="background-sound" src="background.mp3" preload="auto"></audio>
-    <audio id="gameover-sound" src="gameover.mp3" preload="auto"></audio>
 
-    <div id="score-container">
-        Score: <span id="score">0</span>
-    </div>
-    <div id="waitingStart-container">
-        Press [Space] to start the game
-    </div>
-    <div id="gameover-container">
-        <h3>Score</h3>
-        <h2>
-            <span id="final-score">0</span>
-        </h2>
-
-        <div id="statistics">
-            <p>
-                Jump: <span id="jump-number">0</span> time(s)<br>
-                Shoot: <span id="shoot-number">0</span> time(s)
-            </p>
-        </div>
-
-        <div id="ranking">
-            <h4>Ranking</h4>
-            <p>
-                no.1  <span id="no1-user">Alice</span>  <span id="no1-score">250</span><br>
-                no.2  <span id="no2-user">Alice</span>  <span id="no2-score">250</span><br>
-                no.3  <span id="no3-user">Alice</span>  <span id="no3-score">250</span>
-            </p>
-        </div>
+    <div id="front-page" >
+        <div class="caption">Flappy Bird</div>
+        <div id="sign-in-button" class="small-button" >Sign In</div>
+        <div id="register-button" class="small-button" >Register</div>
     </div>
 
-    <div>
-        <span id="restart">Press [Space] to restart the game.</span>
+    <div id="sign-in-page">
+        <form id="sign-in-form" class="col">
+            <div class="caption">Flappy BIRD!!!</div>
+            <input id="sign-in-username" placeholder="username"></input>
+            <input id="sign-in-password" type="password" placeholder="password"></input>
+
+            <button type="submit">Enter</button>
+            <div id="signin-message" ></div>
+        </form>
+        <div id="sign-in-page-back-button" class="small-button" >Back</div>
     </div>
 
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 400">
-        <image href="./bg.gif" x="0" y="0" height="400px" width="1000px" preserveAspectRatio="none"/>
-        <rect id="mask" x="0" y="0" width="1000" height="400" fill="black" opacity="0.4"/>
-        <!-- 
-        <linearGradient id="skyGradient" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="400">
-            <stop offset="0%" stop-color="#0066CC" />
-            <stop offset="100%" stop-color="#87CEEB" />
-        </linearGradient>
-        <rect width="100%" height="100%" fill="url(#skyGradient)" />
+    <div id="register-page" >
+        <form id="register-form" class="col">
+            <div class="caption">Register an account!</div>
+            <input id="register-username" maxlength="10" placeholder="username"></input>
+            <input id="register-name" maxlength="16" placeholder="name"></input>
+            <input id="register-password" type="password" placeholder="password"></input>
+            <input id="register-confirm" type="password" placeholder="password"></input>
+            <button type="submit">Enter</button>
+            <div id="register-message"></div>
+        </form>
+        <div id="register-page-back-button" class="small-button" >Back</div>
+
+    </div>
+
+    <div id="register-redirect-page">
+        <div class="caption">Account Registered!</div>
+        <div id="register-redirect-page-back-button" class="small-button" >Back</div>
+    </div>
+
+    <div id="game-container">
+        <audio id="score-sound" src="score.mp3" preload="auto"></audio>
+        <audio id="background-sound" src="background.mp3" preload="auto"></audio>
+        <audio id="gameover-sound" src="gameover.mp3" preload="auto"></audio>
         
-        <radialGradient cx="0.5" cy="0" id="svg_17" r="2.29" spreadMethod="pad">
-            <stop id="jq_stop_9921" offset="0.07" stop-color="#7f3f00"/>
-            <stop id="jq_stop_1116" offset="1" stop-color="#000000" stop-opacity="1"/>
-        </radialGradient>
-    -->
-        <g id="player" transform="translate(30, 160)">
-            <image href="./bird.png" x="10" y="10" width="50" height="50"/>
-        </g>
-
-
-        <!-- 
-        <g id="player" transform="translate(30, 160)">
-            <path d="M10 20 L20 10 L20 20 L10 20 Z" fill="red" stroke="black" stroke-width="2"/>
-        </g>
-      
-        <g id="waitingStart-container">
-            <text id="waiting" x="500" y="200" fill="red" font-size="40px" text-anchor="middle">
-                Press [Space] to start the game
-            </text>
-        </g>
-
-        <g id="gameover-container">
-            <text id="gameover" x="500" y="200" fill="red" font-size="40px" text-anchor="middle">
-                  <tspan id="gameover-line1" x="500" dy="0"></tspan>
-                  <tspan id="gameover-line2" x="500" dy="1.2em">Press [Space] to restart the game.</tspan>
-            </text>
-        </g>
--->
+        <div id="score-container">
+            Score: <span id="score">0</span>
+        </div>
+        <div id="waitingStart-container">
+            Press [Space] to start the game
+        </div>
+        <div id="gameover-container">
+            <h3>Score</h3>
+            <h2>
+                <span id="final-score">0</span>
+            </h2>
         
-        <g></g>
+            <div id="statistics">
+                <p>
+                    Jump: <span id="jump-number">0</span> time(s)<br>
+                    Shoot: <span id="shoot-number">0</span> time(s)
+                </p>
+            </div>
+        
+            <div id="ranking">
+                <h4>Ranking</h4>
+                <p>
+                    no.1 <span id="no1-user">Alice</span> <span id="no1-score">250</span><br>
+                    no.2 <span id="no2-user">Alice</span> <span id="no2-score">250</span><br>
+                    no.3 <span id="no3-user">Alice</span> <span id="no3-score">250</span>
+                </p>
+            </div>
+        </div>
+        
+        <div>
+            <span id="restart">Press [Space] to restart the game.</span>
+        </div>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 400">
+            <image href="./bg.gif" x="0" y="0" height="400px" width="1000px" preserveAspectRatio="none" />
+            <rect id="mask" x="0" y="0" width="1000" height="400" fill="black" opacity="0.4" />
+            <!-- 
+                <linearGradient id="skyGradient" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="400">
+                    <stop offset="0%" stop-color="#0066CC" />
+                    <stop offset="100%" stop-color="#87CEEB" />
+                </linearGradient>
+                <rect width="100%" height="100%" fill="url(#skyGradient)" />
+                
+                <radialGradient cx="0.5" cy="0" id="svg_17" r="2.29" spreadMethod="pad">
+                    <stop id="jq_stop_9921" offset="0.07" stop-color="#7f3f00"/>
+                    <stop id="jq_stop_1116" offset="1" stop-color="#000000" stop-opacity="1"/>
+                </radialGradient>
+            -->
+            <g id="player" transform="translate(30, 160)">
+                <image href="./bird.png" x="10" y="10" width="50" height="50" />
+            </g>
+        
+        
+            <!-- 
+                <g id="player" transform="translate(30, 160)">
+                    <path d="M10 20 L20 10 L20 20 L10 20 Z" fill="red" stroke="black" stroke-width="2"/>
+                </g>
+              
+                <g id="waitingStart-container">
+                    <text id="waiting" x="500" y="200" fill="red" font-size="40px" text-anchor="middle">
+                        Press [Space] to start the game
+                    </text>
+                </g>
+        
+                <g id="gameover-container">
+                    <text id="gameover" x="500" y="200" fill="red" font-size="40px" text-anchor="middle">
+                          <tspan id="gameover-line1" x="500" dy="0"></tspan>
+                          <tspan id="gameover-line2" x="500" dy="1.2em">Press [Space] to restart the game.</tspan>
+                    </text>
+                </g>
+        -->
+        
+            <g></g>
+        
+        </svg>
+    </div>
 
-    </svg>
 </html>

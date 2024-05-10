@@ -235,16 +235,15 @@ function enterGame() {
 
 
 
-$(document).ready(function() {
+const GamePage = (function() {
+    // This function initializes the UI
+    const initialize = function() {
+        hide();
+    };
 
-    //game_authentication.js
-    Authentication.signin("Hihi", "123",  // dummy sign in using a constant username, password
-    () => 
-    {   // sign-in successful
-        console.log("Log in success");
+    const connect = function() {
         if (Socket.connect() == true) {
             console.log("socket connect success 1");
-
             // request entering the game by calling Socket.sendEnterGameRequest(). 
             // need to wait for some time for the connection to get secure.
             // If there is no other player, 
@@ -254,7 +253,6 @@ $(document).ready(function() {
             // "bird"
             // setTimeout(Socket.sendEnterGameRequest, 1000);
             setTimeout(() => {
-
                 $(document).on('keydown', function(e) {
                     if (e.keyCode == 32) { // Space key
                         if (!gameStarted && !gameOverState) {
@@ -270,11 +268,191 @@ $(document).ready(function() {
         }
         
         // enterGame();
-    },
-    () => 
-    {   // sign-in failure
-        console.log("Log in failure");
-    });
+    }
 
+    // This function shows the form
+    const show = function() {
+        connect();
+        document.getElementById("game-container").style.display = "block";
+        //$("game-container").fadeIn(500);
+    };
+
+    // This function hides the form
+    const hide = function() {
+        document.getElementById("game-container").style.display = "none";
+        //$("game-container").fadeOut(500);
+    };
+
+    return { initialize, show, hide };
+})();
+
+const FrontPage = (function() {
+    // This function initializes the UI
+    const initialize = function() {
+        hide();
+        document.getElementById("sign-in-button").onclick = function() {
+            clickSignInPage();
+        };
+        document.getElementById("register-button").onclick = function() {
+            clickRegisterPage();
+        };
+    };
+
+    const clickSignInPage = function() {
+        hide();
+        SignInPage.show();
+    }
+
+    const clickRegisterPage = function() {
+        hide();
+        RegisterPage.show();
+    }
+
+    // This function shows the form
+    const show = function() {
+        // $("#front-page").fadeIn(500);
+        document.getElementById("front-page").style.display = "block";
+    };
+
+    // This function hides the form
+    const hide = function() {
+        //$("#front-page").fadeOut(500);
+        document.getElementById("front-page").style.display = "none";
+    };
+
+    return { initialize, clickSignInPage, clickRegisterPage, show, hide };
+})();
+
+const SignInPage = (function() {
+    // This function initializes the UI
+    const initialize = function() {
+        hide();
+        //$("#sign-in-page").hide();
+
+        document.getElementById("sign-in-page-back-button").onclick = function() {
+            $("#sign-in-page").hide();
+            FrontPage.show();
+        };
+
+        $("#sign-in-form").on("submit", (e) => {
+            // Do not submit the form
+            e.preventDefault();
+
+            // Get the input fields
+            const username = $("#sign-in-username").val().trim();
+            const password = $("#sign-in-password").val().trim();
+
+            // Send a signin request
+            Authentication.signin(username, password,
+                () => {
+                    hide();
+                    GamePage.show();
+                },
+                (error) => { 
+                    console.log("Log in failure");
+                    $("#signin-message").text(error); 
+                }
+            );
+        });
+    };
+
+    // This function shows the form
+    const show = function() {
+        document.getElementById("sign-in-page").style.display = "block";
+        //$("#sign-in-page").fadeIn(500);
+    };
+
+    // This function hides the form
+    const hide = function() {
+        document.getElementById("sign-in-page").style.display = "none";
+        //$("#sign-in-page").fadeOut(500);
+    };
+
+    return { initialize, show, hide };
+})();
+
+const RegisterPage = (function() {
+    // This function initializes the UI
+    const initialize = function() {
+        $("#register-page").hide();
+        $("#register-redirect-page").hide();
+
+        document.getElementById("register-redirect-page-back-button").onclick = function() {
+            $("#register-redirect-page").hide();
+            FrontPage.show();
+        };
+
+        document.getElementById("register-page-back-button").onclick = function() {
+            $("#register-page").hide();
+            FrontPage.show();
+        };
+
+        $("#register-form").on("submit", (e) => {
+            // Do not submit the form
+            e.preventDefault();
+
+            // Get the input fields
+            const username = $("#register-username").val().trim();
+            const name     = $("#register-name").val().trim();
+            const password = $("#register-password").val().trim();
+            const confirmPassword = $("#register-confirm").val().trim();
+
+            // Password and confirmation does not match
+            if (password != confirmPassword) {
+                $("#register-message").text("Passwords do not match.");
+                return;
+            }
+
+            // Send a register request
+            Registration.register(username, name, password,
+                () => {
+                    $("#register-form").get(0).reset();
+                    $("#register-page").hide();
+                    $("#register-redirect-page").show();
+                },
+                (error) => { $("#register-message").text(error); }
+            );
+        });
+    };
+
+    // This function shows the form
+    const show = function() {
+        document.getElementById("register-page").style.display = "block";
+        //$("#register-page").fadeIn(500);
+    };
+
+    // This function hides the form
+    const hide = function() {
+        document.getElementById("register-page").style.display = "none";
+        // $("#register-page").fadeOut(500);
+    };
+
+    return { initialize, show, hide };
+})();
+
+const UI = (function() {
+
+    // The components of the UI are put here
+    const components = [SignInPage, RegisterPage, FrontPage, GamePage];
+
+    // This function initializes the UI
+    const initialize = function() {
+        // Initialize the components
+        for (const component of components) {
+            component.initialize();
+        }
+    };
+
+    return { initialize };
+})();
+
+
+
+$(document).ready(function() {
+
+    UI.initialize();
+    FrontPage.show();
+    //SignInPage.show();
 
 });
+

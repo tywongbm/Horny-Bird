@@ -45,35 +45,35 @@ const Socket = (function() {
         socket.on("someone jump", (message) => {
             message = JSON.parse(message);
             const {user} = message;
-            const {username, avatar, name} = user;
+            const {username, name} = user;
             jump();
         });
 
         socket.on("someone shoot", (message) => {
             message = JSON.parse(message);
             const {user} = message;
-            const {username, avatar, name} = user;
+            const {username, name} = user;
             // shoot
         });
 
         socket.on("someone update score", (message) => {
             message = JSON.parse(message);
             const {user, score} = message;
-            const {username, avatar, name} = user;
+            const {username, name} = user;
             updateScore(score);
         });
 
         socket.on("someone finish", (message) => {
             message = JSON.parse(message);
             const {user} = message;
-            const {username, avatar, name} = user;
+            const {username, name} = user;
             endGame();
         });
 
         socket.on("start game", (message) => {
             message = JSON.parse(message);
             const {user} = message;
-            const {username, avatar, name} = user;
+            const {username, name} = user;
             console.log("start game");
             enterGame();
         });

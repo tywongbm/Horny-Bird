@@ -31,7 +31,7 @@ function containWordCharsOnly(text) {
 // Handle the /register endpoint
 app.post("/register", (req, res) => {
     // Get the JSON data from the body
-    const { username, avatar, name, password } = req.body;
+    const { username, name, password } = req.body;
 
     //
     // D. Reading the users.json file
@@ -42,7 +42,7 @@ app.post("/register", (req, res) => {
     //
     // E. Checking for the user data correctness
     //
-    if (!username || !avatar || !name) {
+    if (!username || !name) {
         res.json({
             status: "error",
             error: "Username/avatar/name cannot be empty."
@@ -69,7 +69,7 @@ app.post("/register", (req, res) => {
     // G. Adding the new user account
     //
     const hash = bcrypt.hashSync(password, 10);
-    users[username] = {avatar, name, hash};
+    users[username] = {name, hash};
     
     //
     // H. Saving the users.json file
@@ -136,7 +136,6 @@ app.post("/signin", (req, res) => {
     
     req.session.user = {
         username: username,
-        avatar: users[username].avatar,
         name: users[username].name
     };
     
@@ -145,7 +144,6 @@ app.post("/signin", (req, res) => {
         status: "success", 
         user: {
             username: username,
-            avatar: users[username].avatar,
             name: users[username].name
         }
         
@@ -166,12 +164,11 @@ app.get("/validate", (req, res) => {
 
     
     if (typeof req.session.user != "undefined") {
-        const {username, avatar, name} = req.session.user;
+        const {username, name} = req.session.user;
         res.json({
             status: "success",
             user: {
                 username: username,
-                avatar: avatar,
                 name: name
             }
         });
@@ -232,7 +229,7 @@ let obstacleInterval;
 io.on("connection", (socket) => {
     if (socket.request.session.user) {
         const user = socket.request.session.user;
-        const {username, avatar, name} = user;
+        const {username, name} = user;
         onlineUserList[username] = user;
         console.log("123");
         console.log(onlineUserList);
@@ -241,7 +238,7 @@ io.on("connection", (socket) => {
     socket.on("disconnect", () => {
         if (socket.request.session.user) {
             const user = socket.request.session.user;
-            const {username, avatar, name} = user;
+            const {username, name} = user;
             if (onlineUserList[username]) {
                 delete onlineUserList[username];
             }
@@ -263,7 +260,7 @@ io.on("connection", (socket) => {
 
         if (socket.request.session.user) {
             const user = socket.request.session.user;
-            const {username, avatar, name} = user;
+            const {username, name} = user;
 
             const message = {
                 user: user,
@@ -296,7 +293,7 @@ io.on("connection", (socket) => {
 
         if (socket.request.session.user) {
             const user = socket.request.session.user;
-            const {username, avatar, name} = user;
+            const {username, name} = user;
 
             const message = {
                 user: user,
@@ -310,7 +307,7 @@ io.on("connection", (socket) => {
 
         if (socket.request.session.user) {
             const user = socket.request.session.user;
-            const {username, avatar, name} = user;
+            const {username, name} = user;
 
             const message = {
                 user: user,
@@ -324,7 +321,7 @@ io.on("connection", (socket) => {
 
         if (socket.request.session.user) {
             const user = socket.request.session.user;
-            const {username, avatar, name} = user;
+            const {username, name} = user;
 
             const message = {
                 user: user,
@@ -339,7 +336,7 @@ io.on("connection", (socket) => {
 
         if (socket.request.session.user) {
             const user = socket.request.session.user;
-            const {username, avatar, name} = user;
+            const {username, name} = user;
 
             const message = {
                 user: user,
