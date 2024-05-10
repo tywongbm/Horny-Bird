@@ -91,11 +91,12 @@ function createAndAnimateObstacle(obstacleWidth, gapHeight, upperHeight) {
 /* Shooting */
 document.addEventListener('keydown', function(event) {
     if (event.key === 'k') {
-        shootBullet(playerY);
+        Socket.sendFireBulletEvent(playerX, playerY);
+        //shootBullet(playerY);
     }
 });
 
-function shootBullet(playerY) {
+function shootBullet(playerX, playerY) {
     const bullet = document.createElementNS("http://www.w3.org/2000/svg", "rect");
     bullet.setAttribute("x", playerX + 10);
     bullet.setAttribute("y", playerY + 10);

@@ -90,6 +90,13 @@ const Socket = (function() {
 
         });
 
+        socket.on("fire bullet", (m) => {
+            m = JSON.parse(m);
+
+            const {playerX, playerY} = m;
+            shootBullet(playerX, playerY);
+        });
+
         return true;
     };
 
@@ -133,5 +140,18 @@ const Socket = (function() {
         }
     };
 
-    return { getSocket, connect, disconnect, sendEnterGameRequest, sendJumpEvent, sendShootEvent ,sendUpdateScoreEvent, sendFinishEvent };
+    const sendFireBulletEvent = function(playerX, playerY) {
+        if (socket && socket.connected) {
+            message = {
+                playerX: playerX,
+                playerY: playerY
+            };
+
+            socket.emit("request fire bullet", JSON.stringify(message, null, " "));
+        }
+    }
+
+    
+
+    return { getSocket, connect, disconnect, sendEnterGameRequest, sendJumpEvent, sendShootEvent ,sendUpdateScoreEvent, sendFinishEvent, sendFireBulletEvent };
 })();

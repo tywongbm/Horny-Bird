@@ -350,6 +350,17 @@ io.on("connection", (socket) => {
         }
     });
 
+    socket.on("request fire bullet", (message) => {
+        if (socket.request.session.user) {
+            const user = socket.request.session.user;
+            const {username, name} = user;
+
+            message = JSON.parse(message);
+
+            io.emit("fire bullet", JSON.stringify(message, null, " "));
+        }
+    });
+
 });
 
 
