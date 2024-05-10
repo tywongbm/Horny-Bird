@@ -91,7 +91,8 @@ function createAndAnimateObstacle(obstacleWidth, gapHeight, upperHeight) {
 /* Shooting */
 document.addEventListener('keydown', function(event) {
     if (event.key === 'k') {
-        Socket.sendFireBulletEvent(playerX, playerY);
+        shoots += 1;
+        Socket.sendFireBulletEvent(playerX, playerY, shoots);
         //shootBullet(playerY);
     }
 });
@@ -210,6 +211,8 @@ document.addEventListener('keyup', function(event) {
 let gameStarted = false;
 let gameOverState = false;
 let score = 0;
+let jumps = 0;
+let shoots = 0;
 
 
 function updateScore(s) {
@@ -243,7 +246,8 @@ function startGame() {
     checkGameover();
 }
 
-function endGame() {
+//function endGame(thisGameScores, thisGameJumps, thisGameShoots, firstThreeScoresPairs) {
+function endGame(thisGameScores, thisGameJumps, thisGameShoots) {
     var gameoverSound = document.getElementById('gameover-sound');
     var backgroundSound = document.getElementById('background-sound');
     backgroundSound.pause();
@@ -258,8 +262,41 @@ function endGame() {
     /* ********************************************** */
     /* Shoule be Modified, request date from server */
     /* ********************************************** */
-    document.getElementById('jump-number').textContent = 0;
-    document.getElementById('shoot-number').textContent = 0;
+
+    for (username in thisGameJumps) {
+        $("#statistics-paragraph").append(UI.getUserStatisticsHTML(username, "jumps", thisGameJumps[username]));
+    }
+
+    for (username in thisGameShoots) {
+        $("#statistics-paragraph").append(UI.getUserStatisticsHTML(username, "shoots", thisGameShoots[username]));
+    }
+
+    /*
+    const championScoresPairsArray = firstThreeScoresPairs[championScoresPairsArray];
+    const secondScoresPairsArray = firstThreeScoresPairs[secondScoresPairsArray];
+    const thirdScoresPairsArray = firstThreeScoresPairs[thirdScoresPairsArray];
+
+    for (let i = 0; i < championScoresPairsArray.length; ++i) {
+        $("#champion").append(UI.getUserStatisticsHTML
+            (championScoresPairsArray[i][highScoreUsername]
+                , "scores", championScoresPairsArray[i][highScore]));
+    }
+
+    for (let i = 0; i < secondScoresPairsArray.length; ++i) {
+        $("#second").append(UI.getUserStatisticsHTML
+            (secondScoresPairsArray[i][highScoreUsername]
+                , "scores", secondScoresPairsArray[i][highScore]));
+    }
+
+    for (let i = 0; i < thirdScoresPairsArray.length; ++i) {
+        $("#third").append(UI.getUserStatisticsHTML
+            (thirdScoresPairsArray[i][highScoreUsername]
+                , "scores", thirdScoresPairsArray[i][highScore]));
+    }
+    */
+
+    // document.getElementById('jump-number').textContent = 0;
+    // document.getElementById('shoot-number').textContent = 0;
     document.getElementById('no1-user').textContent = "Alice";
     document.getElementById('no1-score').textContent = 250;
     document.getElementById('no2-user').textContent = "Alice";
@@ -337,7 +374,8 @@ const GamePage = (function() {
                             Socket.sendEnterGameRequest();
                         } else {
                             // jump();
-                            Socket.sendJumpEvent();
+                            jumps += 1;
+                            Socket.sendJumpEvent(jumps);
                         }
                     }
                 });
@@ -510,6 +548,12 @@ const RegisterPage = (function() {
 
 const UI = (function() {
 
+    const getUserStatisticsHTML = function(username, parameterName, number) {
+        const userStatisticsHTML = 
+        $("<span id=" + parameterName + "-" + username + ">" + username + " " + parameterName + " " + number + " times" + "</span>");
+        return userStatisticsHTML;
+    }
+
     // The components of the UI are put here
     const components = [SignInPage, RegisterPage, FrontPage, GamePage];
 
@@ -521,7 +565,7 @@ const UI = (function() {
         }
     };
 
-    return { initialize };
+    return { getUserStatisticsHTML, initialize };
 })();
 
 

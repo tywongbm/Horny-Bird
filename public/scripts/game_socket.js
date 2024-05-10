@@ -65,9 +65,11 @@ const Socket = (function() {
 
         socket.on("someone finish", (message) => {
             message = JSON.parse(message);
-            const {user} = message;
+            const {user, thisGameScores, thisGameJumps, thisGameShoots} = message;
+            // const {user, thisGameScores, thisGameJumps, thisGameShoots, firstThreeScoresPairs} = message;
             const {username, name} = user;
-            endGame();
+            endGame(thisGameScores, thisGameJumps, thisGameShoots);
+            // endGame(thisGameScores, thisGameJumps, thisGameShoots, firstThreeScoresPairs);
         });
 
         socket.on("start game", (message) => {
@@ -93,7 +95,7 @@ const Socket = (function() {
         socket.on("fire bullet", (m) => {
             m = JSON.parse(m);
 
-            const {playerX, playerY} = m;
+            const {playerX, playerY, shoots} = m;
             shootBullet(playerX, playerY);
         });
 
@@ -124,9 +126,9 @@ const Socket = (function() {
     }
 
 
-    const sendJumpEvent = function() {
+    const sendJumpEvent = function(jumps) {
         if (socket && socket.connected) {
-            socket.emit("jump");
+            socket.emit("jump", jumps);
         }
     };
 
@@ -148,11 +150,12 @@ const Socket = (function() {
         }
     };
 
-    const sendFireBulletEvent = function(playerX, playerY) {
+    const sendFireBulletEvent = function(playerX, playerY, shoots) {
         if (socket && socket.connected) {
             message = {
                 playerX: playerX,
-                playerY: playerY
+                playerY: playerY,
+                shoots: shoots
             };
 
             socket.emit("request fire bullet", JSON.stringify(message, null, " "));

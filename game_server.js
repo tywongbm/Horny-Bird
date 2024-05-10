@@ -224,6 +224,10 @@ let num_users = 0;
 
 let obstacleInterval;
 
+const thisGameScores = {};
+const thisGameJumps = {};
+const thisGameShoots = {};
+
 
 io.on("connection", (socket) => {
     if (socket.request.session.user) {
@@ -303,11 +307,13 @@ io.on("connection", (socket) => {
         }
     });
 
-    socket.on("jump", () => {
+    socket.on("jump", (jumps) => {
 
         if (socket.request.session.user) {
             const user = socket.request.session.user;
             const {username, name} = user;
+
+            thisGameJumps[username] = jumps;
 
             const message = {
                 user: user,
@@ -341,6 +347,8 @@ io.on("connection", (socket) => {
             const user = socket.request.session.user;
             const {username, name} = user;
 
+            thisGameScores[username] = score;
+
             const message = {
                 user: user,
                 score: score
@@ -356,9 +364,137 @@ io.on("connection", (socket) => {
             const user = socket.request.session.user;
             const {username, name} = user;
 
+
+
+            /*
+            const highScores = JSON.parse(fs.readFileSync("./data/game_highscores.json"));
+
+            let maxScore = 0;
+            let maxScoreUsername = "";
+            for (const username in thisGameScores)
+            {
+                if (thisGameScores[username] > maxScore) {
+                    maxScore = thisGameScores[username];
+                    maxScoreUsername = username;
+                }
+            }
+            if (maxScoreUsername != "") {
+                highScores[maxScoreUsername] = maxScore;
+            }
+
+            fs.writeFileSync("./data/game_highscores.json", JSON.stringify(highScores, null, " "));
+
+
+            const highScoresArray = [];
+            const highScoresUsersArray = [];
+            let i = 0;
+            for (const username in highScores) {
+                highScoresArray[i] = highScores[username];
+                highScoresUsersArray[i] = username;
+                ++i;
+            }
+
+            // sort into descending
+            let exit = false;
+            while(exit == false) {
+                exit = true;
+                for (let j = 0; j < highScoresArray.length - 1; ++j) {
+                    if (highScoresArray[j] < highScoresArray[j+1]) {
+
+                        let temp = highScoresArray[j];
+                        highScoresArray[j] = highScoresArray[j+1];
+                        highScoresArray[j+1] = temp;
+
+                        let temp2 = highScoresUsersArray[j];
+                        highScoresUsersArray[j] = highScoresUsersArray[j+1];
+                        highScoresUsersArray[j+1] = temp2;
+                        exit = false;
+                    }
+                }
+            }
+
+            const highScoresPairsArray = [];
+
+            for (let j = 0; j < highScoresArray.length - 1; ++j) {
+                const obj = {
+                    highScoreUsername: highScoresUsersArray[j],
+                    highScore: highScoresArray[j]
+                };
+                highScoresPairsArray[j] = obj;
+            }
+
+            const championScoresPairsArray = [];
+            const secondScoresPairsArray = [];
+            const thirdScoresPairsArray = [];
+
+            let k = 0;
+            let n = 0;
+            if (k < highScoresPairsArray.length) 
+                championScoresPairsArray[n] = highScoresPairsArray[k];
+            k += 1;
+            n += 1;
+            while (k < highScoresPairsArray.length ) {
+                if (highScoresPairsArray[k][highScore] == highScoresPairsArray[k-1][highScore]) {
+                    championScoresPairsArray[n] = highScoresPairsArray[k];
+                    k += 1;
+                    n += 1;
+                }
+                else {
+                    break;
+                }
+            }
+
+            n = 0;
+            if (k < highScoresPairsArray.length) 
+                secondScoresPairsArray[n] = highScoresPairsArray[k];
+            k += 1;
+            while (k < highScoresPairsArray.length ) {
+                if (highScoresPairsArray[k][highScore] == highScoresPairsArray[k-1][highScore]) {
+                    secondScoresPairsArray[n] = highScoresPairsArray[k];
+                    k += 1;
+                }
+                else {
+                    break;
+                }
+            }
+
+            n = 0;
+            if (k < highScoresPairsArray.length) 
+                thirdScoresPairsArray[n] = highScoresPairsArray[k];
+            k += 1;
+            while (k < highScoresPairsArray.length ) {
+                if (highScoresPairsArray[k][highScore] == highScoresPairsArray[k-1][highScore]) {
+                    thirdScoresPairsArray[n] = highScoresPairsArray[k];
+                    k += 1;
+                }
+                else {
+                    break;
+                }
+            }
+
+            */
+
             const message = {
                 user: user,
+                thisGameScores: thisGameScores,
+                thisGameJumps: thisGameJumps,
+                thisGameShoots: thisGameShoots,
+                
             };
+
+            /*
+            const message = {
+                user: user,
+                thisGameScores: thisGameScores,
+                thisGameJumps: thisGameJumps,
+                thisGameShoots: thisGameShoots,
+                firstThreeScoresPairs: {
+                    championScoresPairsArray: championScoresPairsArray,
+                    secondScoresPairsArray: secondScoresPairsArray,
+                    thirdScoresPairsArray: thirdScoresPairsArray
+                }
+            };
+            */
 
             // if game is over, all users finish
             clearInterval(obstacleInterval);
@@ -373,6 +509,9 @@ io.on("connection", (socket) => {
             const {username, name} = user;
 
             message = JSON.parse(message);
+            const {playerX, playerY, shoots} = message;
+
+            thisGameShoots[username] = shoots;
 
             if (num_clients == 2) {
                 io.emit("fire bullet", JSON.stringify(message, null, " "));
