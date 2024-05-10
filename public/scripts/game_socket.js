@@ -141,7 +141,16 @@ const Socket = (function() {
         }
     };
 
-    
+    const sendFireBulletEvent = function(playerX, playerY) {
+        if (socket && socket.connected) {
+            message = {
+                playerX: playerX,
+                playerY: playerY
+            };
+
+            socket.emit("request fire bullet", JSON.stringify(message, null, " "));
+        }
+    }
 
     ///aaa
 
