@@ -361,6 +361,24 @@ io.on("connection", (socket) => {
         }
     });
 
+    socket.on("request enable cheat mode", () => {
+        if (socket.request.session.user) {
+            const user = socket.request.session.user;
+            const {username, name} = user;
+
+            io.emit("enable cheat mode");
+        }
+    });
+
+    socket.on("request disable cheat mode", () => {
+        if (socket.request.session.user) {
+            const user = socket.request.session.user;
+            const {username, name} = user;
+
+            io.emit("disable cheat mode");
+        }
+    });
+
 });
 
 

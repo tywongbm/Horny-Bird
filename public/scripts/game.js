@@ -183,17 +183,26 @@ function jump() {
 /* Cheating mode */
 let enterPressed = false;
 
+function enableCheatMode() {
+    enterPressed = true;
+    $("#player").css('opacity', '0.5');
+}
+
+function disableCheatMode() {
+    enterPressed = false;
+    $("#player").css('opacity', '1'); 
+}
+
+
 document.addEventListener('keydown', function(event) {
     if (event.key === "Enter") {
-        enterPressed = true;
-        $("#player").css('opacity', '0.5');
+        Socket.sendEnableCheatModeEvent();
     }
 });
 
 document.addEventListener('keyup', function(event) {
     if (event.key === "Enter") {
-        enterPressed = false;
-        $("#player").css('opacity', '1'); 
+        Socket.sendDisableCheatModeEvent();
     }
 });
 

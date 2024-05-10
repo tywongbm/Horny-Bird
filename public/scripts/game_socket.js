@@ -90,11 +90,12 @@ const Socket = (function() {
 
         });
 
-        socket.on("fire bullet", (m) => {
-            m = JSON.parse(m);
+        socket.on("enable cheat mode", () => {
+            enableCheatMode();
+        });
 
-            const {playerX, playerY} = m;
-            shootBullet(playerX, playerY);
+        socket.on("disable cheat mode", () => {
+            disableCheatMode();
         });
 
         return true;
@@ -151,7 +152,17 @@ const Socket = (function() {
         }
     }
 
-    
+    const sendEnableCheatModeEvent = function() {
+        if (socket && socket.connected) {
+            socket.emit("request enable cheat mode");
+        }
+    }
 
-    return { getSocket, connect, disconnect, sendEnterGameRequest, sendJumpEvent, sendShootEvent ,sendUpdateScoreEvent, sendFinishEvent, sendFireBulletEvent };
+    const sendDisableCheatModeEvent = function() {
+        if (socket && socket.connected) {
+            socket.emit("request disable cheat mode");
+        }
+    }
+
+    return { getSocket, connect, disconnect, sendEnterGameRequest, sendJumpEvent, sendShootEvent ,sendUpdateScoreEvent, sendFinishEvent, sendFireBulletEvent, sendEnableCheatModeEvent, sendDisableCheatModeEvent };
 })();
