@@ -394,7 +394,7 @@ button.icon:active {
     background: rgba(0, 0, 0, 0.2);
 }
 
-#front-page, #sign-in-page, #register-page{
+#front-page, #sign-in-page, #register-page, #register-redirect-page{
     width: 35%;
     margin-left: auto;
     margin-right: auto;
@@ -438,6 +438,7 @@ button.icon:active {
 #front-page .small-button,
 #sign-in-page .small-button,
 #register-page .small-button,
+#register-redirect-page .small-button,
 button {
     font-weight: normal;
     width: 25%;

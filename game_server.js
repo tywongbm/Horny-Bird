@@ -277,12 +277,12 @@ io.on("connection", (socket) => {
                     const m = {
                         // m should contain parameters related to obstacle creation
                         obstacleWidth: 80, 
-                        gapHeight: 150, 
-                        upperHeight: Math.random() * 100 + 50
+                        gapHeight: 100, 
+                        upperHeight: Math.random() * 200 + 50
                     };
 
                     io.emit("create obstacle", JSON.stringify(m, null, " "));
-                }, 2000);
+                }, 1000);
 
             }
 
@@ -361,5 +361,5 @@ app.listen(8000, () => {
 */
 
 httpServer.listen(8000, () => {
-    console.log("The chat server has started...");
+    console.log("The Horny Bird server has started...");
 });
